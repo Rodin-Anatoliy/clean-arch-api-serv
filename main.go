@@ -79,6 +79,7 @@ func main() {
 	log.Println("Сервер успешно остановлен")
 }
 
+////////////////////// init
 func initDB() *sql.DB {
 	db, err := sql.Open("sqlite3", "./test.db")
 	if err != nil {
@@ -106,7 +107,7 @@ func initRedis() *redis.Client {
 	})
 }
 
-// /////////////////// models
+////////////////////// models
 type User struct {
 	Id       int    `json:"id" db:"id,primarykey,autoincrement"`
 	Name     string `json:"name" db:"name"`
@@ -115,7 +116,7 @@ type User struct {
 	Age      int    `json:"age" db:"age"`
 }
 
-// /////////////////// db
+////////////////////// db
 type UserDB interface {
 	Create(ctx context.Context, user User) (int, error)
 	GetAll(ctx context.Context) ([]User, error)
@@ -186,7 +187,7 @@ func (u *userDb) GetAll(ctx context.Context) ([]User, error) {
 	return users, nil
 }
 
-// /////////////////// cache
+////////////////////// cache
 type Cache interface {
 	Set(ctx context.Context, key string, value interface{}) error
 	Get(ctx context.Context, key string, ptrValue interface{}) error
@@ -256,7 +257,7 @@ func (c *cache) Delete(ctx context.Context, key string) error {
 	return nil
 }
 
-// /////////////////// repo
+////////////////////// repo
 type UserRepo interface {
 	Create(ctx context.Context, user User) (int, error)
 	GetAll(ctx context.Context) ([]User, error)
@@ -278,7 +279,7 @@ func (ur *userRepo) GetAll(ctx context.Context) ([]User, error) {
 	return ur.db.GetAll(ctx)
 }
 
-// /////////////////// Proxy repo
+////////////////////// Proxy repo
 type proxyUserRepo struct {
 	repo  UserRepo
 	cache Cache
@@ -326,7 +327,7 @@ func (p *proxyUserRepo) GetAll(ctx context.Context) ([]User, error) {
 	return users, nil
 }
 
-// /////////////////// service
+////////////////////// service
 type UserService interface {
 	Create(ctx context.Context, user User) (int, error)
 	GetAll(ctx context.Context) ([]User, error)
@@ -353,7 +354,7 @@ func (us *userService) GetAll(ctx context.Context) ([]User, error) {
 	return us.repo.GetAll(ctx)
 }
 
-// /////////////////// controller
+////////////////////// controller
 type UserController interface {
 	Create(w http.ResponseWriter, r *http.Request)
 	GetAll(w http.ResponseWriter, r *http.Request)
