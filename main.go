@@ -378,6 +378,13 @@ func (uc *userController) Create(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(err.Error()))
 		return
 	}
+	
+	if	user.Name == "" || user.Password == "" || user.Email == "" || user.Age <= 0 {
+		log.Printf("не все обязательные поля заполнены\n")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("не все обязательные поля заполнены"))
+		return
+	}
 
 	id, err := uc.service.Create(r.Context(), user)
 	if err != nil {
