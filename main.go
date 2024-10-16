@@ -342,7 +342,6 @@ func NewUserService(repo UserRepo) UserService {
 }
 
 func (us *userService) Create(ctx context.Context, user User) (int, error) {
-	//email можно поставить как уникальное поле и эта валидация упадет на db
 	if user.Age < 18 {
 		return 0, fmt.Errorf("возраст пользователя меньше 18 лет")
 	}
